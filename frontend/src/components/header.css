@@ -1,0 +1,119 @@
+.headerr{
+    height: 108px;
+}
+
+
+
+.navv:hover{
+    
+    color: black;
+    background-color: grey;
+    
+}
+
+
+.tbl{
+	width: 100%;
+
+
+
+}
+
+.wrapper{
+	text-align: center;
+	margin:0 auto;
+	width: 800px;
+
+
+}
+
+
+
+
+
+
+.navv{
+    color: #333333;
+    display: inline-block;
+    font-size: 25px;
+    padding-right: 45px;
+    padding-left: 45px;
+    padding-bottom:10px;
+    padding-top: 10px;
+    margin-right: 60px;
+    margin-top: 20px;
+    /* margin-bottom: 1000px; */
+}
+
+
+.logo{
+    display: inline-block;
+    /* margin-top: 20px; */
+
+    
+}
+
+.home{
+    color: #333333;
+    display: inline-block;
+    font-size: 25px;
+    padding-right: 25px;
+    padding-bottom:10px;
+    padding-left: 0px;
+    margin-left: 0px;
+    margin-top:20px;
+    margin-right: 60px;
+
+}
+
+
+.spanHover{
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 12px;
+    padding-bottom: 10px;
+}
+
+.spanHover:hover{
+    background-color: grey
+}
+
+
+.bodyStyle{
+    background-color: black;
+    height: 700px;
+}
+
+
+.footer{
+    margin-top: 0px;
+    background-color: white;
+    text-align: middle;
+    font-size: 20px;
+    color: white;
+    height: 100px;
+
+}
+
+.try{
+    background-color: #1c1b1b;
+    height: 200px;
+    font-size: 20px;
+    color: white;
+}
+
+
+
+
+
+
+
+
+
+td, th{
+	
+	border: 1px solid #ddd;
+
+
+
+}
