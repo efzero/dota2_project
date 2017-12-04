@@ -2,6 +2,10 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 var ml = require('./ml.js');
+var spawn = require('child_process').spawn;
+var fs = require('fs');
+
+
 
 
 
@@ -80,7 +84,8 @@ app.get('/players', function(req, res){
 app.get('/user/:userID', function(req, res){
 	console.log('nihaoma');
 	var target = String(req.params.userID) + " limit 50";
-	var result = ""
+	var result = "";
+
 	var query =  "SELECT account_id, gold_per_min as gold_per_min, xp_per_min as xp_per_min, hero_damage as hero_damage, stuns as stuns FROM player WHERE account_id = " + target;
         var q = 'SELECT stuns FROM player WHERE account_id = 100';
 	con.query(query, function(err, result4, fields){
@@ -244,7 +249,8 @@ app.get('/matches', function(req, res){
 
 });
 
-
+var matrix;
+var y;
 
 app.post('/input-form', function(req, res){
 
@@ -264,8 +270,8 @@ app.post('/input-form', function(req, res){
                         }
 
 
-                        var matrix = result.slice(1).map(createMatrix);
-                        var y = result.slice(1).map(createLabel);
+                        matrix = result.slice(1).map(createMatrix);
+                        y = result.slice(1).map(createLabel);
 
 			var output = ml.run_regression(req.body, matrix, y);
 			console.log(output);
@@ -277,6 +283,86 @@ app.post('/input-form', function(req, res){
 
 
 
+app.post('/quick_query', function(req, res){
+	console.log(req.body);
+
+	console.log(matrix);
+	console.log(y);
+
+
+});
+
+
+
+app.post('/teammate', function(req,res){
+	if (!fs.existsSync('knn_model.sav')){
+
+	con.query("SELECT * FROM player_ratings limit 100000", function(err, result, fields){
+		
+		var py = spawn('python3',['-u', 'knn.py']);
+		
+		var create_Matrix = function(a){
+			return [a['account_id'], a['total_wins'], a['total_matches'], a['trueskill_mu'], a['trueskill_sigma']]
+		}
+		var id = [-1]
+		var query = id.concat(req.body);
+
+		
+		matrix = result.map(create_Matrix);
+		y = matrix.slice()
+		y.push(query)
+		py.stdin.write(JSON.stringify(y));
+		py.stdin.end();
+		var dataString = '';
+
+		py.stdout.on('data', function(data){
+        		dataString += data.toString();
+        		console.log("has red");
+        		console.log(dataString);
+  		});
+	
+		py.stdout.on('end', function(data){
+			console.log(dataString);
+			console.log('ending');
+			res.send(dataString);
+		});
+	});
+	}
+
+	else{
+		var py = spawn('python3',['-u', 'knn.py']);
+
+                var create_Matrix = function(a){
+                        return [a['account_id'], a['total_wins'], a['total_matches'], a['trueskill_mu'], a['trueskill_sigma']]
+                }
+                var id = [-1]
+                var query = id.concat(req.body);
+		
+                py.stdin.write(JSON.stringify(query));
+                py.stdin.end();
+                var dataString = '';
+
+                py.stdout.on('data', function(data){
+                        dataString += data.toString();
+                        console.log("has red");
+                        console.log(dataString);
+                });
+
+                py.stdout.on('end', function(data){
+                        console.log(dataString);
+                        console.log('ending');
+			con.query('SELECT * FROM player_ratings WHERE indices IN (' + dataString + ')', function(err, result, fields){
+				console.log(result);
+	
+				var final_result = result.map(create_Matrix);
+				console.log(final_result);
+                        	res.send(final_result);
+			});
+                });
+
+	}
+
+});
 
 
 
