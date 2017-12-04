@@ -178,15 +178,14 @@ app.post('/update',function(req,res){
 
 
 app.post('/userUpdate', function(req, res){
-
-	var firstq = 'UPDATE player SET gold_per_min = ' + req.body['gold_per_min'] + ', account_id = ' + req.body['account_id'] + ', stuns = ' + req.body['stuns'] + ', xp_per_min = ' + req.body['xp_per_min'];
-	var secondq = ' WHERE gold_per_min = ' + req.body['gpm'] + ' AND account_id = ' + req.body['pid'] + ' AND xp_per_min =' + req.body['xpm'];
-	var thirdq = ' WHERE account_id = ' + req.body['account_id'];
+	var firstq = 'UPDATE player SET gold_per_min = ' + req.body['gold_per_min'] + ', account_id = ' +  req.body['account_id'] + ', hero_damage = ' + req.body['hero_damage']+ ', stuns = ' + req.body['stuns'] + ', xp_per_min = ' + req.body['xp_per_min'];
+	var secondq = ' WHERE gold_per_min = ' + req.body['gpm'] + ' AND account_id = ' + req.body['pid'] + ' AND xp_per_min =' + req.body['xpm'] + ' AND stuns = ' +req.body['stu'];
 
 	var err = false;
 
-	console.log(firstq + secondq);
+//	console.log(firstq + secondq);
 	var query = firstq + secondq;
+	console.log(query);
 	for (i in req.body){
 		if (isNaN(parseFloat(req.body[i])) == true){
 			err = true;
