@@ -65,6 +65,61 @@ function handleDisconnect(){
 handleDisconnect();
 
 
+
+
+
+
+app.get('/getUser/:id', function(req, res){
+	console.log('starting api');
+	var target = req.params.id;
+	console.log(target);
+	
+	var query = 'call proc(' + target + ')';
+	console.log(query);
+	con.query(query, function(err, result,fields){
+		if (err)
+			console.log(err);
+		res.send(result);
+
+	});
+	
+
+
+})
+
+
+
+
+app.get('/pageinate/:pages', function(req, res){
+	var target = req.params.pages;
+	
+	console.log(typeof(target));
+
+	if (isNaN(parseInt(target)) == false){
+		var lower_bound = (parseInt(target)-1)*100;
+		var upper_bound = lower_bound + 99;
+		
+		var query = 'SELECT DISTINCT (account_id), AVG(gold_per_min) as gpm, AVG(xp_per_min) as xpm, AVG(hero_damage) as hero_damage, AVG(stuns) as stuns FROM player WHERE account_id >= ' + lower_bound + ' AND account_id <= ' + upper_bound + '  GROUP BY account_id limit 100';
+
+		console.log(query);
+		
+		con.query(query, function(err, result, fields){
+			if (err)
+				console.log(err);
+			res.send(result);
+
+		})
+		
+	}
+	else
+		res.send('error');
+});
+
+
+
+
+
+
 app.get('/users', function(req, res){
 	console.log('iget');
 	console.log(str);
@@ -97,6 +152,57 @@ app.get('/user/:userID', function(req, res){
 })
 
 
+app.get('/matches/:matchID', function(req, res){
+	var target = String(req.params.matchID);
+	var result = "";
+	var query = "call search_matches ";
+	query = query + '(' + target + ')';
+	console.log(query);
+	con.query(query, function(err, result4, fields){
+		result = result4;
+		console.log(result);
+		res.send(result);
+
+	});
+
+});
+
+
+app.post('/insert-match', function(req, res){
+
+	var query = 'INSERT INTO matches(match_id, duration, game_mode, positive_votes, radiant_win) VALUES';
+	var infos = []
+	
+	for (i in req.body){
+		if (isNaN(parseFloat(req.body[i])) == true)
+			infos.push("'" + req.body[i] + "'");
+		else
+			infos.push(req.body[i]);
+
+	}
+
+	
+	var q = infos.join(',');
+	var target = " (" + q + ")";
+	query = query + target;
+	console.log(query)
+	
+	con.query(query, function(err, result4, fields){
+		var result;
+		if (err){
+			console.log(err);
+			result = err;
+		}
+		else{	console.log(result4);
+			result = result4;
+		}
+		
+		res.send(result);
+	});
+
+
+
+});
 
 //run_regression([10,10,2,10]);
 
@@ -106,10 +212,9 @@ app.get('/newuser', function(req, res){
 
 	var query = "SELECT account_id, gold_per_min, xp_per_min, kda FROM userPlayer limit 100";
 	var result = "";
-	
+	console.log(query);
 	con.query(query, function(err, result4, fields){
 		result = result4;
-		console.log(result);
 		res.send(result);
 
 	});
@@ -173,6 +278,7 @@ app.post('/update',function(req,res){
 		var q=infos;
 		var target=infos;
 		query=query+target;
+		console.log(query);
 		con.query(query,function(err,result4,fields){
 		res.send('nijiejie');
 		})
@@ -190,7 +296,6 @@ app.post('/userUpdate', function(req, res){
 
 //	console.log(firstq + secondq);
 	var query = firstq + secondq;
-	console.log(query);
 	for (i in req.body){
 		if (isNaN(parseFloat(req.body[i])) == true){
 			err = true;
@@ -200,6 +305,7 @@ app.post('/userUpdate', function(req, res){
 	}	
 
 	if (!err || err){
+		console.log(query)
 		con.query(query, function(err, result4, fields){
 			console.log(result4);
 			console.log('suceess');
@@ -219,6 +325,7 @@ app.post('/delete', function(req,res){
 	var query="DELETE from userPlayer WHERE account_id=" ;
 	var err=false;
 	var infos=[];
+	console.log('deleting');
 	for(i in req.body){
 		if(isNaN(parseFloat(req.body[i]))==true){
 			err=true
@@ -228,12 +335,14 @@ app.post('/delete', function(req,res){
 
 	}
 	if( !err){
-		var q=infos;
+		var q=req.body['id'];
 		var target=q;
 		query=query+target;
-		console.log(q);
+		//console.log(q);
+		console.log(query);
 		con.query(query,function(err,result4,fields){
-		console.log(result4);
+		//console.log(result4);
+		console.log('deleted');
 		res.send('nibaba');
 		});
 	}
@@ -295,9 +404,24 @@ app.post('/quick_query', function(req, res){
 
 
 app.post('/teammate', function(req,res){
+
+
+
+	 for (i in req.body){
+                if (isNaN(parseFloat(req.body[i])) == true){
+                        console.log('error');
+                        res.send('error');
+                        return;
+                }
+        }
+
+
 	if (!fs.existsSync('knn_model.sav')){
 
-	con.query("SELECT * FROM player_ratings limit 100000", function(err, result, fields){
+
+
+
+	con.query("SELECT * FROM player_ratings LIMIT 200000", function(err, result, fields){
 		
 		var py = spawn('python3',['-u', 'knn.py']);
 		
@@ -309,7 +433,7 @@ app.post('/teammate', function(req,res){
 
 		
 		matrix = result.map(create_Matrix);
-		y = matrix.slice()
+		y = matrix.slice();
 		y.push(query)
 		py.stdin.write(JSON.stringify(y));
 		py.stdin.end();

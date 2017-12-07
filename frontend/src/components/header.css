@@ -2,7 +2,53 @@
     height: 108px;
 }
 
+.title{
+	width : 100%;
+	height: 100px;
+	text-align: center;
 
+}
+
+.graphs{
+
+
+	height: 500px; 
+
+
+}
+
+.col{
+	font-size: 14px;
+	width: 100%;
+	height: 100%;
+
+}
+
+.col1{
+	width: 50%;
+	height: 400px;
+	float: left;
+
+}
+
+
+.col2{
+
+	width: 50%;
+	height: 400px;
+	float: left;
+
+
+}
+
+
+.row1{
+
+	display: block;
+	height: 200px;
+
+
+}
 
 .navv:hover{
     
@@ -19,10 +65,25 @@
 
 }
 
+
+.prr{
+
+	width: 30%;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	height: 400px;
+	font-size: 18px;
+
+}
+
+
+
 .wrapper{
 	text-align: center;
-	margin:0 auto;
-	width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 1000px;
 
 
 }

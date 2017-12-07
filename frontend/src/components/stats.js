@@ -3,15 +3,16 @@ import {AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
 import {Radar, RadarChart, PolarGrid, Legend, PolarAngleAxis, PolarRadiusAxis} from 'recharts';
 import {BarChart, Bar} from 'recharts';
 import {LineChart, Line} from 'recharts';
-import {Form, Text} from 'react-form';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import Tablerow from './tablerow.js';
+import './header.css';
 
 
 
-import {Bootstrap, Grid, Row, Col} from 'react-bootstrap';
+
+import {Bootstrap, Grid, Row, Col, Form, FormGroup, FormControl, Button} from 'react-bootstrap';
 
 
 
@@ -83,38 +84,24 @@ export default class Stats extends Component{
 		const predict_data = this.state.data.map((entry, index) => Object.assign({"name":titles[index], "data": entry}));
 	//	const data = durations.map(function (entry, index) {const str = String(index*10+20); const obj = Object.assign({"name": str, "data": entry}); return obj;});
 		
-		return (<div>
-
-
-				<LineChart width={600} height={300} data={data}
-            				margin={{top: 5, right: 30, left: 20, bottom: 5}} >
-       				<XAxis dataKey="name"/>
-       				<YAxis/>
-       				<CartesianGrid strokeDasharray="3 3"/>
-       				<Tooltip/>
-       				<Legend />
-       				<Line type="monotone" dataKey="data" stroke="#8884d8" activeDot={{r: 8}}/>
-     				</LineChart>
+		return (<div className = 'col'>
 				
-				<AreaChart width = {600} height = {400} data = {data}>
-				<XAxis dataKey = "name"/>
-				<YAxis/>
-				<Tooltip/>
-				<Area type = 'monotone' dataKey = "data" />
-				</AreaChart>
-
-
-
-				<RadarChart cx={300} cy={250} outerRadius={150} width={600} height={500} data={data}>
+				
+				<div className = 'title'> The two charts below show the distribution of game times among all games </div>
+			
+				<div className = 'col1'>
+	
+			<RadarChart cx={450} cy={125} outerRadius={100} width={550} height={350} data={data}>
 					<PolarGrid />
 					<PolarAngleAxis dataKey="name" />
 					<PolarRadiusAxis/>
 					<Tooltip/>
 					<Radar name="Mike" dataKey="data" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6}/>
 				</RadarChart>
-				
-				<BarChart width={600} height={300} data={data}
-        				    margin={{top: 20, right: 30, left: 20, bottom: 5}}>
+				</div>
+
+				<div className = 'col2'>
+				<BarChart width={300} height={300} data={data}>
     				   <XAxis dataKey="name"/>
       				   <YAxis/>
     				   <CartesianGrid strokeDasharray="3 3"/>
@@ -122,21 +109,16 @@ export default class Stats extends Component{
       			           <Legend />
                                    <Bar dataKey="data" fill="#8884d8" />
       				</BarChart>
-				
-			    <Form>
-			      {formApi => (
-				<form onSubmit = {this.onSubmit} id = "form1">			
-				 <label htmlFor = "kills">kills</label>
-				 <Text field = "kills" id = "kills" />
-				<label htmlFor = "assists">assists</label>
-                                 <Text field = "assists" id = "assists"/>
-				<label htmlFor = "deaths">deaths</label>
-                                 <Text field = "deaths" id = "deaths"/>
-				<label htmlFor = "denies">denies</label>
-                                 <Text field = "denies" id = "denies"/>
-				 <button type = "submit">Submit</button>
-				</form>
-				)}
+				</div>
+
+
+
+				<Form onSubmit = {this.onSubmit} id = "form1">
+				    <input type = 'text' placeholder = 'kills' name ='kills'></input>			
+				    <input type = 'text' placeholder = 'deaths' name = 'deaths'></input>
+				    <input type = 'text' placeholder = 'assists' name = 'assists'></input>
+				    <input type = 'text' placeholder = 'denies' name = 'denies'></input>                                 
+				 <Button bsStyle = 'primary'  type = "submit">Submit</Button>
 				</Form>
 				<div> hero_damage : {parseInt(this.state.data[4]*5000)} </div>
 				<RadarChart cx ={300} cy ={250} outerRadius = {150} width = {600} height = {500} data = {predict_data}>
@@ -146,23 +128,17 @@ export default class Stats extends Component{
 					<Tooltip />
 					<Radar name = "Mary" dataKey = "data" stroke = "#789a7c" fill = "#789a7c" fillOpacity = {0.4} />
 				</RadarChart>
-				
+            			
+                                	<Form inline  onSubmit = {this.CompareData} id = "form1">
+						<input type = 'text' placeholder = 'wins' name = 'win'></input>
+                                 		<input type = 'text' placeholder = 'matches' name = 'matches'></input>
 
-				 <Form>
-                              		{formApi => (
-                                	<form onSubmit = {this.CompareData} id = "form1">
-                                 	<label htmlFor = "kills">Total Wins</label>
-                                 	<Text field = "kills" id = "kills" />
-                                	<label htmlFor = "assists">Total Matches</label>
-                                 	<Text field = "assists" id = "assists"/>
-                                	<label htmlFor = "deaths">TrueSkill Average</label>
-                                 	<Text field = "deaths" id = "deaths"/>
-                                	<label htmlFor = "denies">TrueSkill Standard Deviation</label>
-                                 	<Text field = "denies" id = "denies"/>
-                                 	<button type = "submit">Submit</button>
-                                	</form>
-                                	)}
-                                </Form>
+						<input type = 'text' placeholder = 'trueskill average' name = 'trueskill'></input>
+                                	
+						<input type = 'text' placeholder = 'trueskill standard deviation' name = 'trueskillstd'></input>
+                                 	<Button bsStyle = 'primary'  type = "submit">Submit</Button>
+                                	</Form>
+                                
 
 
 				<table>

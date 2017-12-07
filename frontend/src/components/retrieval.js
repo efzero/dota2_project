@@ -32,6 +32,7 @@ export default class Retrieval extends React.Component{
 		this.handleUpdate=this.handleUpdate.bind(this);
 		this.handleClick2=this.handleClick2.bind(this);
 		this.handleJump = this.handleJump.bind(this);
+		this.ViewDetail = this.ViewDetail.bind(this);
 
 	}
 
@@ -55,12 +56,26 @@ export default class Retrieval extends React.Component{
 			const str = '/user/' + id;
 			fetch(str).then(res=> res.json()).then(res => this.setState({players: res})).catch(function(err){console.log(err)});
 		}
+
 		else{
 
 			this.setState({players: this.props.players});
 
 		}
 	}
+
+
+	ViewDetail(id){
+		if (id == undefined) return;
+		console.log(id);
+		const str_ = String(id);
+		fetch('/getUser/' + str_).then(res => res.json()).then(res => this.props.gotoParent(res)).catch(function(err){console.log(err)});
+
+	}
+
+
+
+
 
 
 
@@ -158,7 +173,7 @@ export default class Retrieval extends React.Component{
     render(){
 
 
-	const newplayer = this.state.players.map((row, index) => <Tablerow key = {index} data = {row}/>);
+	const newplayer = this.state.players.map((row, index) => <Tablerow key = {index} data = {row} handleLink = {this.ViewDetail}/>);
 	/*const playerdata = this.state.players.map((row, index) => 
 		<tr key = {index}>
 			<td>{row['account_id']}</td>
@@ -198,10 +213,12 @@ undefined?-9999:parseFloat(row['hero_damage']).toFixed(1)}</td>
 		 <Button  onClick = {this.handleClick}>Insert into the database</Button>
 		 <Button bsStyle = "danger" onClick= {this.handleClick1}>Delete from the database</Button>
 		 <Button  bsStyle = "primary" onClick= {this.handleClick2}>Update from the database</Button>
-           	
+           	<Button onClick = {this.props.changeContent}>View the details of each user </Button>
+
 
 		</ButtonToolbar>
 		</div>
+
 		<br/>
 		<Form inline onSubmit = {this.handleSubmit}>
 			<FormGroup controlId = "formControlsText">	

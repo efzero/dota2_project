@@ -8,7 +8,7 @@ import Retrieval from './components/retrieval.js';
 import Matches from './components/matches.js';
 import Stats from './components/stats.js';
 import About from './components/about.js';
-
+import View from './components/view.js';
 
 
 
@@ -19,13 +19,24 @@ class App extends Component {
     users:[],
     players: [],
     matches: [],
-    current:1
+    current:1,
+    detailData: []
     }
 
     this.handleClick = this.handleClick.bind(this);
+    this.changeView = this.changeView.bind(this);
 
   }
 
+
+
+changeView(data){
+
+	console.log(data[0]);
+	this.setState({current: 6, detailData: data[0]});
+
+
+}
 
 
   handleClick(i){
@@ -71,12 +82,20 @@ class App extends Component {
         content = <Matches matches = {this.state.matches}/>;
         break;
       case 2:
-        content = <Retrieval players = {this.state.players}/>;
+        content = <Retrieval players = {this.state.players} gotoParent = {this.changeView}/>;
         break;
       case 4:
 	content = <Stats players = {this.state.players} matches = {this.state.matches}/>;
-	break;    
+	break;
 
+      case 5:
+	content = <About/>;
+	break;
+
+
+      case 6:
+	content = <View matches ={this.state.detailData}/>;
+	break;
     }
 
     console.log(this.state.current);    

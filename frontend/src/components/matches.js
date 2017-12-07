@@ -84,7 +84,7 @@ returnToBeginning(ev){
         return (
             <div className = 'match_table'>{msg}
                  <form onSubmit = {this.handleSubmit}>
-                        <input type = 'text' placeholder = 'Enter the accountID' name = 'userid'></input>
+                        <input type = 'text' placeholder = 'Enter the match ID' name = 'userid'></input>
                         <input type = 'submit' value = 'Search'></input>
                 </form>
 

@@ -77,8 +77,8 @@ export default class Tablerow extends Component {
 		console.log(this.state.gpm);
 		const rowTable = (
 				<tr>
-				<td>{this.state.id == undefined? -1: this.state.id}</td>
-				<td>{this.state.gpm == undefined? -1:parseFloat(this.state.gpm).toFixed(1)}</td>
+				<td><a onClick = {() => this.props.handleLink(this.state.id)}> {this.state.id == undefined? -1: this.state.id}</a></td>
+				<td> {this.state.gpm == undefined? -1: parseFloat(this.state.gpm).toFixed(1)} </td>
 				<td>{this.state.hdm == undefined? -1:parseFloat(this.state.hdm).toFixed(1)}</td>
 				<td>{this.state.stuns == undefined? -1:parseFloat(this.state.stuns).toFixed(1)}</td>
 				<td>{this.state.xpm == undefined? -1:parseFloat(this.state.xpm).toFixed(1)}</td>
