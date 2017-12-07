@@ -38,9 +38,11 @@ export default class Retrieval extends React.Component{
 
 	handleJump(ev){
 		ev.preventDefault();
-		console.log(ev.target);
-
-
+		console.log(ev.target.jumping.value);
+		const id = String(ev.target.jumping.value);
+		if (isNaN(parseFloat(id)) == false){
+			const str = '/pageinate/' + id;
+			fetch(str).then(res => res.json()).then(res => this.setState({players: res})).catch(function(err){console.log(err)});}
 	}
 
 
@@ -247,14 +249,15 @@ undefined?-9999:parseFloat(row['hero_damage']).toFixed(1)}</td>
 		</table>
 
 		<br/>
-		<Form inline>
+		<Form inline onSubmit = {this.handleJump}>
 			<FormGroup>
 				<ControlLabel>Jump to Page</ControlLabel>
 			<FormControl type = "text" placeholder = "1" name = "jumping" />
-			</FormGroup>
-			<Button type = "submit" onClick = {this.handleJump}>
+			
+			<Button type = "submit">
 				Go
 			</Button>
+			</FormGroup>
 		</Form>
 		<br/>
  	    </div>

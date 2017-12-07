@@ -7,6 +7,7 @@ import Footer from './components/Footer.js';
 import Retrieval from './components/retrieval.js';
 import Matches from './components/matches.js';
 import Stats from './components/stats.js';
+import About from './components/about.js';
 
 
 

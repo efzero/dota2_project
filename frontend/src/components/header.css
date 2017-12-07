@@ -28,7 +28,9 @@
 }
 
 
-
+.match_table{
+	
+}
 
 
 
@@ -103,17 +105,29 @@
 }
 
 
+.ser:nth-child(even) {
+
+	background-color:#f2f2f2;
+
+
+}
 
 
 
 
 
 
-
-td, th{
+table,td, th{
 	
-	border: 1px solid #ddd;
+	border: 2px solid #ddd;
+}
 
-
-
+table{
+	width: 100%;
+}
+th{
+       background-color: hsl(0, 100%, 30%);
+       color: white;	
+       text-align: center;
+       height : 50px;
 }

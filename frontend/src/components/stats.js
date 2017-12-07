@@ -5,6 +5,16 @@ import {BarChart, Bar} from 'recharts';
 import {LineChart, Line} from 'recharts';
 import {Form, Text} from 'react-form';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap-theme.css';
+import Tablerow from './tablerow.js';
+
+
+
+import {Bootstrap, Grid, Row, Col} from 'react-bootstrap';
+
+
+
 
 
 export default class Stats extends Component{
@@ -13,10 +23,12 @@ export default class Stats extends Component{
 	  super(props);
 
 	this.state ={
-	     data : Array(5).fill(null)
+	     data : Array(5).fill(null),
+	     players: -1
 	};
 	
 	  this.onSubmit = this.onSubmit.bind(this);
+	  this.CompareData = this.CompareData.bind(this);
 	}
 	
 	onSubmit(event){
@@ -25,10 +37,32 @@ export default class Stats extends Component{
 	  const input_data = values.slice(0,4).map((entry)=> parseInt(entry));
 	  axios.post('/input-form',input_data).then((res)=> res.data).then(function(res){input_data.push(res/5000); const d = input_data.slice(); this.setState({data: d})}.bind(this));
 	}
+
+	CompareData(event){
+
+	  event.preventDefault();
+	  const values = Object.keys(event.target).map((entry,index)=>event.target[entry].value);
+	  console.log(values);	
+	  const input_data = values.slice(0,4).map((entry)=>parseInt(entry));
+
+	  axios.post('/teammate', input_data).then((res)=> this.setState({players: res.data}));
+
+	}
+
+	
+
 	
 	render(){
-
-		console.log(this.state);
+		//const cur_players = JSON.parse(this.state.players);
+		let Table; 
+		if (this.state.players != -1 && this.state.players != 'error'){
+			console.log(this.state.players);
+			let cur_players = this.state.players.slice();
+			//const cur_players = JSON.parse(this.state.players);
+			Table = cur_players.map((entry,index) => <tr className = 'ser' key = {index}> {entry.map((e,i) => <td className = 'sdf' key = {i}>{e}</td>)} </tr> )
+			console.log(Table);
+			//console.log(cur_players[0]);
+		}
 		const matches = this.props.matches;
 		const times = matches.map((entry, index) => entry['duration']);
 		let durations = [0,0,0,0,0]
@@ -53,7 +87,7 @@ export default class Stats extends Component{
 
 
 				<LineChart width={600} height={300} data={data}
-            				margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+            				margin={{top: 5, right: 30, left: 20, bottom: 5}} >
        				<XAxis dataKey="name"/>
        				<YAxis/>
        				<CartesianGrid strokeDasharray="3 3"/>
@@ -112,6 +146,44 @@ export default class Stats extends Component{
 					<Tooltip />
 					<Radar name = "Mary" dataKey = "data" stroke = "#789a7c" fill = "#789a7c" fillOpacity = {0.4} />
 				</RadarChart>
+				
+
+				 <Form>
+                              		{formApi => (
+                                	<form onSubmit = {this.CompareData} id = "form1">
+                                 	<label htmlFor = "kills">Total Wins</label>
+                                 	<Text field = "kills" id = "kills" />
+                                	<label htmlFor = "assists">Total Matches</label>
+                                 	<Text field = "assists" id = "assists"/>
+                                	<label htmlFor = "deaths">TrueSkill Average</label>
+                                 	<Text field = "deaths" id = "deaths"/>
+                                	<label htmlFor = "denies">TrueSkill Standard Deviation</label>
+                                 	<Text field = "denies" id = "denies"/>
+                                 	<button type = "submit">Submit</button>
+                                	</form>
+                                	)}
+                                </Form>
+
+
+				<table>
+					<tr>
+						<th>account ID</th>
+						<th>total wins</th>
+						<th>total matches</th>
+						<th>trueskill average</th>
+						<th>trueskill standard deviation</th>
+					</tr>
+					{Table}
+
+					
+				</table>
+				
+
+
+
+
+
+
 			</div>
 			);
 
