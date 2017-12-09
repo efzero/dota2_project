@@ -31,10 +31,6 @@ var con = mysql.createConnection({
 var str = ""; 
 
 var run_regression = function (input, x, y){
-
-
-
-	
 	/*var p;
 	var checked = false;
 	return con.connect(function(err){
@@ -50,7 +46,7 @@ var run_regression = function (input, x, y){
 				return [a.kills, a.assists, a.denies, a.deaths];
 
 			}
-			var res = function(a){
+:x
 				return [a.hero_damage];
 			}
 	

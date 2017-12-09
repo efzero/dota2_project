@@ -71,7 +71,11 @@ returnToBeginning(ev){
 
 	if (this.state.insertion != ''){
 		console.log(this.state.insertion);
-		if (this.state.insertion.insertId != undefined){
+		if (this.state.insertion == 'error in input'){
+			msg = 'error in input';
+
+		}
+		else if (this.state.insertion.insertId != undefined){
 			console.log('good');
 			msg = 'success';
 			console.log(this.state.insertion);

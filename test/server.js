@@ -71,7 +71,7 @@ handleDisconnect();
 
 app.get('/getUser/:id', function(req, res){
 	console.log('starting api');
-	var target = req.params.id;
+	var target = mysql.escape(req.params.id);
 	console.log(target);
 	
 	var query = 'call proc(' + target + ')';
@@ -138,7 +138,7 @@ app.get('/players', function(req, res){
 
 app.get('/user/:userID', function(req, res){
 	console.log('nihaoma');
-	var target = String(req.params.userID) + " limit 50";
+	var target = mysql.escape(String(req.params.userID)) + " limit 50";
 	var result = "";
 
 	var query =  "SELECT account_id, gold_per_min as gold_per_min, xp_per_min as xp_per_min, hero_damage as hero_damage, stuns as stuns FROM player WHERE account_id = " + target;
@@ -172,9 +172,17 @@ app.post('/insert-match', function(req, res){
 
 	var query = 'INSERT INTO matches(match_id, duration, game_mode, positive_votes, radiant_win) VALUES';
 	var infos = []
-	
+	console.log(req.body);
 	for (i in req.body){
-		if (isNaN(parseFloat(req.body[i])) == true)
+		
+		if (i == 'wins' && (req.body[i] != 'True' && req.body.wins != 'False' )){
+			console.log(req.body[i]);
+			res.send('error in input');
+			return;
+		}
+
+		
+		else if (isNaN(parseFloat(req.body[i])) == true)
 			infos.push("'" + req.body[i] + "'");
 		else
 			infos.push(req.body[i]);
@@ -190,10 +198,10 @@ app.post('/insert-match', function(req, res){
 	con.query(query, function(err, result4, fields){
 		var result;
 		if (err){
-			console.log(err);
+		//	console.log(err);
 			result = err;
 		}
-		else{	console.log(result4);
+		else{	//console.log(result4);
 			result = result4;
 		}
 		
@@ -290,7 +298,7 @@ app.post('/update',function(req,res){
 
 app.post('/userUpdate', function(req, res){
 	var firstq = 'UPDATE player SET gold_per_min = ' + req.body['gold_per_min'] + ', account_id = ' +  req.body['account_id'] + ', hero_damage = ' + req.body['hero_damage']+ ', stuns = ' + req.body['stuns'] + ', xp_per_min = ' + req.body['xp_per_min'];
-	var secondq = ' WHERE gold_per_min = ' + req.body['gpm'] + ' AND account_id = ' + req.body['pid'] + ' AND xp_per_min =' + req.body['xpm'] + ' AND stuns = ' +req.body['stu'];
+	var secondq = ' WHERE gold_per_min = ' + mysql.escape(req.body['gpm']) + ' AND account_id = ' + mysql.escape(req.body['pid']) + ' AND xp_per_min =' + mysql.escape(req.body['xpm']) + ' AND stuns = ' + mysql.escape(req.body['stu']);
 
 	var err = false;
 
@@ -336,7 +344,7 @@ app.post('/delete', function(req,res){
 	}
 	if( !err){
 		var q=req.body['id'];
-		var target=q;
+		var target=mysql.escape(q);
 		query=query+target;
 		//console.log(q);
 		console.log(query);
@@ -367,7 +375,7 @@ app.post('/input-form', function(req, res){
 
 
         
-	con.query("SELECT * FROM player limit 100", function(err, result, fields){
+	con.query("SELECT * FROM player limit 1000", function(err, result, fields){
                         str = result
                         console.log(str.length);
                         var createMatrix = function(a){
@@ -419,7 +427,7 @@ app.post('/teammate', function(req,res){
 	if (!fs.existsSync('knn_model.sav')){
 
 
-
+	
 
 	con.query("SELECT * FROM player_ratings LIMIT 200000", function(err, result, fields){
 		
