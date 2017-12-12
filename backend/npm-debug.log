@@ -9,8 +9,8 @@
 6 silly lifecycle dota2_stats@~prestart: no script for prestart, continuing
 7 info lifecycle dota2_stats@~start: dota2_stats@
 8 verbose lifecycle dota2_stats@~start: unsafe-perm in lifecycle true
-9 verbose lifecycle dota2_stats@~start: PATH: /home/bsong18/.nvm/versions/node/v6.11.4/lib/node_modules/npm/bin/node-gyp-bin:/home/shared/dota2_project/test/node_modules/.bin:/home/bsong18/.nvm/versions/node/v6.11.4/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/bsong18/.local/bin:/home/bsong18/bin
-10 verbose lifecycle dota2_stats@~start: CWD: /home/shared/dota2_project/test
+9 verbose lifecycle dota2_stats@~start: PATH: /home/bsong18/.nvm/versions/node/v6.11.4/lib/node_modules/npm/bin/node-gyp-bin:/home/shared/dota2_project/backend/node_modules/.bin:/home/bsong18/.nvm/versions/node/v6.11.4/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/bsong18/.local/bin:/home/bsong18/bin
+10 verbose lifecycle dota2_stats@~start: CWD: /home/shared/dota2_project/backend
 11 silly lifecycle dota2_stats@~start: Args: [ '-c', 'node server.js' ]
 12 silly lifecycle dota2_stats@~start: Returned: code: 1  signal: null
 13 info lifecycle dota2_stats@~start: Failed to exec start script
@@ -25,7 +25,7 @@
 14 verbose stack     at maybeClose (internal/child_process.js:920:16)
 14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:230:5)
 15 verbose pkgid dota2_stats@
-16 verbose cwd /home/shared/dota2_project/test
+16 verbose cwd /home/shared/dota2_project/backend
 17 error Linux 3.10.0-693.5.2.el7.x86_64
 18 error argv "/home/bsong18/.nvm/versions/node/v6.11.4/bin/node" "/home/bsong18/.nvm/versions/node/v6.11.4/bin/npm" "start"
 19 error node v6.11.4

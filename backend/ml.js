@@ -32,8 +32,7 @@ var run_regression = function (input, x, y){
 				console.log(lr.costs);
 			});
 
-			var p = lr.predict(input);
-			return p;
+			return lr;
 			
 			//svm.train({C: 1.0, tol: 1e-5, kernel: {type :'polynomial', c:1, d:5}});			//});
 

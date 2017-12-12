@@ -69,6 +69,8 @@ handleDisconnect();
 
 
 
+
+//advanced technique, view, procedure, natural join
 app.get('/getUser/:id', function(req, res){
 	console.log('starting api');
 	var target = mysql.escape(req.params.id);
@@ -151,6 +153,8 @@ app.get('/user/:userID', function(req, res){
 
 })
 
+
+//advanced techniques 2: trigger, constraints
 
 app.get('/matches/:matchID', function(req, res){
 	var target = String(req.params.matchID);
@@ -368,13 +372,24 @@ app.get('/matches', function(req, res){
 
 var matrix;
 var y;
+var lr;
 
+
+
+
+//advanced function 1: linear regression
 app.post('/input-form', function(req, res){
 
+	//read the model if it exists
+	if (lr != undefined){
+		var output = lr.predict(req.body);
+		res.send(''+output);
+		return;
+	}
 
 
 
-        
+      	//else build the model
 	con.query("SELECT * FROM player limit 1000", function(err, result, fields){
                         str = result
                         console.log(str.length);
@@ -390,7 +405,8 @@ app.post('/input-form', function(req, res){
                         matrix = result.slice(1).map(createMatrix);
                         y = result.slice(1).map(createLabel);
 
-			var output = ml.run_regression(req.body, matrix, y);
+			lr = ml.run_regression(req.body, matrix, y);
+			var output = lr.predict(req.body);
 			console.log(output);
 			res.send(''+output);
 			});
@@ -410,6 +426,10 @@ app.post('/quick_query', function(req, res){
 });
 
 
+
+
+//advanced function 2: nearest neighbors, using python3 sklearn model
+//advanced techniques 6: indexing
 
 app.post('/teammate', function(req,res){
 
